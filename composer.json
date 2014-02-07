@@ -23,6 +23,7 @@
             "url": "git@github.com:UaQuetzalcoatl/QtzCommon.git"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.4",
         "zendframework/zend-validator": "2.3.*@dev"
