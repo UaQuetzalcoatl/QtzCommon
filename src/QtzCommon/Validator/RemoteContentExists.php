@@ -65,6 +65,25 @@ class RemoteContentExists extends AbstractValidator
      */
     public function isValid($value)
     {
+        try {
+            $client = $this->getHttpClient();
+            $response = $client->reset()
+                ->setUri($value)
+                ->send();
+
+        } catch (\Zend\Http\Exception\InvalidArgumentException $e) {
+            $this->error(self::ERROR_INVALID_URI);
+            return false;
+        } catch (\Exception $e) {
+            $this->error(self::ERROR_NO_CONTENT_EXISTS);
+            return false;
+        }
+
+        if ($response->setStatusCode() != 200) {
+            $this->error(self::ERROR_NO_CONTENT_EXISTS);
+            return false;
+        }
+
         return true;
     }
 
