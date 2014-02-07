@@ -1,6 +1,6 @@
 <?php
 
-namespace QtzCommon;
+namespace QtzCommon\Validator;
 
 use Zend\Validator\AbstractValidator;
 use Zend\Http\Client;
@@ -94,6 +94,10 @@ class RemoteContentExists extends AbstractValidator
      */
     public function getHttpClient()
     {
+        if (null === $this->httpClient) {
+            $this->httpClient = new Client;
+        }
+        
         return $this->httpClient;
     }
 
@@ -101,7 +105,7 @@ class RemoteContentExists extends AbstractValidator
      * Set http client
      *
      * @param \Zend\Http\Client $httpClient
-     * @return \QtzCommon\RemoteContentExists
+     * @return \QtzCommon\Validator\RemoteContentExists
      */
     public function setHttpClient(Client $httpClient)
     {
