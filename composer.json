@@ -1,0 +1,35 @@
+{
+    "name": "uaquetzalcoatl/qtz-common",
+    "description": "ZF2 Common functionality",
+    "homepage": "https://github.com/UaQuetzalcoatl/QtzCommon",
+    "keywords": ["zf2", "common"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Savchenko",
+            "email": "ua.quetzalcoatl@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "QtzCommon": "src/",
+            "QtzCommonTest": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:UaQuetzalcoatl/QtzCommon.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.4",
+        "zendframework/zend-validator": "2.3.*@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "3.7.*",
+        "satooshi/php-coveralls": ">=0.6.0",
+        "squizlabs/php_codesniffer": "1.4.*"
+    }
+}
