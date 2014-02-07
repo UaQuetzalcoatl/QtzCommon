@@ -32,4 +32,36 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
         $validator = new RemoteContentExists(array('client' => $client));
         $this->assertEquals($client, $validator->getHttpClient());
     }
+
+    public function testInvalidUrl()
+    {
+        $client = new Http\Client;
+        $adapter = new Http\Client\Adapter\Test;
+        $client->setAdapter($adapter);
+        $validator = new RemoteContentExists($client);
+
+        $adapter->setResponse(
+            "HTTP/1.1 404 Not Found"  . "\r\n" .
+            "Content-type: text/html" . "\r\n" .
+                                       "\r\n"
+        );
+
+        $this->assertFalse($validator->isValid('someuri.com'));
+    }
+
+    public function testValidUrl()
+    {
+        $client = new Http\Client;
+        $adapter = new Http\Client\Adapter\Test;
+        $client->setAdapter($adapter);
+        $validator = new RemoteContentExists($client);
+
+        $adapter->setResponse(
+            "HTTP/1.1 200 OK"        . "\r\n" .
+            "Content-type: text/html" . "\r\n" .
+                                       "\r\n"
+        );
+
+        $this->assertTrue($validator->isValid('somehost.com'));
+    }
 }
