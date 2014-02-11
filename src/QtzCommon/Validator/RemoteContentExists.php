@@ -73,7 +73,7 @@ class RemoteContentExists extends AbstractValidator
                 ->setUri($value)
                 ->setMethod(Request::METHOD_HEAD)
                 ->send();
-        }catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
             $this->error(self::ERROR_INVALID_URL);
             return false;
         } catch (\Exception $e) {
