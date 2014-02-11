@@ -19,11 +19,14 @@ class RemoteContentExists extends AbstractValidator
      */
     const ERROR_NO_CONTENT_EXISTS = 'noContentExists';
 
+    const ERROR_INVALID_URL = 'invalidUrl';
+
     /**
      * @var array Message templates
      */
     protected $messageTemplates = array(
         self::ERROR_NO_CONTENT_EXISTS => "Content does not exists",
+        self::ERROR_INVALID_URL => "Invalid url",
     );
 
     /**
@@ -70,7 +73,9 @@ class RemoteContentExists extends AbstractValidator
                 ->setUri($value)
                 ->setMethod(Request::METHOD_HEAD)
                 ->send();
-
+        }catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+            $this->error(self::ERROR_INVALID_URL);
+            return false;
         } catch (\Exception $e) {
             $this->error(self::ERROR_NO_CONTENT_EXISTS);
             return false;
