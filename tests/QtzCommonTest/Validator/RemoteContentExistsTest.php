@@ -49,6 +49,21 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($validator->isValid('someuri.com'));
     }
 
+    public function testInvalidUrlWithException()
+    {
+        $client = new Http\Client;
+        $adapter = new Http\Client\Adapter\Test;
+        $adapter->setNextRequestWillFail(true);
+        $client->setAdapter($adapter);
+        $validator = new RemoteContentExists($client);
+        $result = $validator->isValid('someuri.com');
+        $errors = $validator->getMessages();
+        $templates = $validator->getMessageTemplates();
+
+        $this->assertFalse($result);
+        $this->assertEquals($templates[RemoteContentExists::ERROR_INVALID_URL], array_pop($errors));
+    }
+
     public function testValidUrl()
     {
         $client = new Http\Client;
@@ -63,5 +78,11 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue($validator->isValid('somehost.com'));
+    }
+
+    public function testRealUrl()
+    {
+        $validator = new RemoteContentExists;
+        $this->assertTrue($validator->isValid('http://google.com'));
     }
 }
