@@ -64,4 +64,10 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($validator->isValid('somehost.com'));
     }
+
+    public function testRealUrl()
+    {
+        $validator = new RemoteContentExists;
+        $this->assertTrue($validator->isValid('google.com'));
+    }
 }

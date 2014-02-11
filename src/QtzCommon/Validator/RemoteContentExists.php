@@ -4,6 +4,7 @@ namespace QtzCommon\Validator;
 
 use Zend\Validator\AbstractValidator;
 use Zend\Http\Client;
+use Zend\Http\Request;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -67,6 +68,7 @@ class RemoteContentExists extends AbstractValidator
             $client = $this->getHttpClient();
             $response = $client->reset()
                 ->setUri($value)
+                ->setMethod(Request::METHOD_HEAD)
                 ->send();
 
         } catch (\Exception $e) {
@@ -90,7 +92,14 @@ class RemoteContentExists extends AbstractValidator
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new Client;
+
+            $this->httpClient = new Client(
+                null,
+                array(
+                    'adapter'   => 'Zend\Http\Client\Adapter\Curl',
+                    'curloptions' => array(CURLOPT_NOBODY => true)
+                )
+            );
         }
 
         return $this->httpClient;
