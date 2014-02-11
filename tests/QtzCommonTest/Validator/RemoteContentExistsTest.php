@@ -43,7 +43,7 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
         $adapter->setResponse(
             "HTTP/1.1 404 Not Found"  . "\r\n" .
             "Content-type: text/html" . "\r\n" .
-                                       "\r\n"
+            "\r\n"
         );
 
         $this->assertFalse($validator->isValid('someuri.com'));
@@ -59,7 +59,7 @@ class RemoteContentExistsTest extends PHPUnit_Framework_TestCase
         $adapter->setResponse(
             "HTTP/1.1 200 OK"        . "\r\n" .
             "Content-type: text/html" . "\r\n" .
-                                       "\r\n"
+            "\r\n"
         );
 
         $this->assertTrue($validator->isValid('somehost.com'));
