@@ -4,6 +4,7 @@ namespace QtzCommon\Validator;
 
 use Zend\Validator\AbstractValidator;
 use Zend\Http\Client;
+use Zend\Http\Request;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -18,11 +19,14 @@ class RemoteContentExists extends AbstractValidator
      */
     const ERROR_NO_CONTENT_EXISTS = 'noContentExists';
 
+    const ERROR_INVALID_URL = 'invalidUrl';
+
     /**
      * @var array Message templates
      */
     protected $messageTemplates = array(
         self::ERROR_NO_CONTENT_EXISTS => "Content does not exists",
+        self::ERROR_INVALID_URL => "Invalid url",
     );
 
     /**
@@ -67,8 +71,11 @@ class RemoteContentExists extends AbstractValidator
             $client = $this->getHttpClient();
             $response = $client->reset()
                 ->setUri($value)
+                ->setMethod(Request::METHOD_HEAD)
                 ->send();
-
+        }catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+            $this->error(self::ERROR_INVALID_URL);
+            return false;
         } catch (\Exception $e) {
             $this->error(self::ERROR_NO_CONTENT_EXISTS);
             return false;
@@ -90,7 +97,14 @@ class RemoteContentExists extends AbstractValidator
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new Client;
+
+            $this->httpClient = new Client(
+                null,
+                array(
+                    'adapter'   => 'Zend\Http\Client\Adapter\Curl',
+                    'curloptions' => array(CURLOPT_NOBODY => true)
+                )
+            );
         }
 
         return $this->httpClient;
